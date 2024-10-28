@@ -104,7 +104,8 @@ class GShoppingFlux extends Module
                     || !Configuration::updateValue('GS_FEATURED_PRODUCTS', '1', false, (int) $shop_group_id, (int) $shop_id)
                     || !Configuration::updateValue('GS_GEN_FILE_IN_ROOT', '1', false, (int) $shop_group_id, (int) $shop_id)
                     || !Configuration::updateValue('GS_FILE_PREFIX', '', true, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_LOCAL_SHOP_CODE', '', true, (int) $shop_group_id, (int) $shop_id)) {
+                    || !Configuration::updateValue('GS_LOCAL_SHOP_CODE', '', true, (int) $shop_group_id, (int) $shop_id)
+                    || !Configuration::updateValue('GS_REVIEW_MODULES', '', true, (int) $shop_group_id, (int) $shop_id)) {
                     return false;
                 }
             }
@@ -216,7 +217,35 @@ class GShoppingFlux extends Module
         }
 
         if ($delete_params) {
-            if (!$this->uninstallDB() || !Configuration::deleteByName('GS_PRODUCT_TYPE') || !Configuration::deleteByName('GS_DESCRIPTION') || !Configuration::deleteByName('GS_SHIPPING_MODE') || !Configuration::deleteByName('GS_SHIPPING_PRICE') || !Configuration::deleteByName('GS_SHIPPING_COUNTRY') || !Configuration::deleteByName('GS_SHIPPING_COUNTRIES') || !Configuration::deleteByName('GS_CARRIERS_EXCLUDED') || !Configuration::deleteByName('GS_IMG_TYPE') || !Configuration::deleteByName('GS_MPN_TYPE') || !Configuration::deleteByName('GS_GENDER') || !Configuration::deleteByName('GS_AGE_GROUP') || !Configuration::deleteByName('GS_ATTRIBUTES') || !Configuration::deleteByName('GS_COLOR') || !Configuration::deleteByName('GS_MATERIAL') || !Configuration::deleteByName('GS_PATTERN') || !Configuration::deleteByName('GS_SIZE') || !Configuration::deleteByName('GS_EXPORT_MIN_PRICE') || !Configuration::deleteByName('GS_NO_GTIN') || !Configuration::deleteByName('GS_SHIPPING_DIMENSION') || !Configuration::deleteByName('GS_NO_BRAND') || !Configuration::deleteByName('GS_ID_EXISTS_TAG') || !Configuration::deleteByName('GS_EXPORT_NAP') || !Configuration::deleteByName('GS_QUANTITY') || !Configuration::deleteByName('GS_FEATURED_PRODUCTS') || !Configuration::deleteByName('GS_GEN_FILE_IN_ROOT') || !Configuration::deleteByName('GS_FILE_PREFIX') || !Configuration::deleteByName('GS_LOCAL_SHOP_CODE')) {
+            if (!$this->uninstallDB()
+                || !Configuration::deleteByName('GS_PRODUCT_TYPE')
+                || !Configuration::deleteByName('GS_DESCRIPTION')
+                || !Configuration::deleteByName('GS_SHIPPING_MODE')
+                || !Configuration::deleteByName('GS_SHIPPING_PRICE')
+                || !Configuration::deleteByName('GS_SHIPPING_COUNTRY')
+                || !Configuration::deleteByName('GS_SHIPPING_COUNTRIES')
+                || !Configuration::deleteByName('GS_CARRIERS_EXCLUDED')
+                || !Configuration::deleteByName('GS_IMG_TYPE')
+                || !Configuration::deleteByName('GS_MPN_TYPE')
+                || !Configuration::deleteByName('GS_GENDER')
+                || !Configuration::deleteByName('GS_AGE_GROUP')
+                || !Configuration::deleteByName('GS_ATTRIBUTES')
+                || !Configuration::deleteByName('GS_COLOR')
+                || !Configuration::deleteByName('GS_MATERIAL')
+                || !Configuration::deleteByName('GS_PATTERN')
+                || !Configuration::deleteByName('GS_SIZE')
+                || !Configuration::deleteByName('GS_EXPORT_MIN_PRICE')
+                || !Configuration::deleteByName('GS_NO_GTIN')
+                || !Configuration::deleteByName('GS_SHIPPING_DIMENSION')
+                || !Configuration::deleteByName('GS_NO_BRAND')
+                || !Configuration::deleteByName('GS_ID_EXISTS_TAG')
+                || !Configuration::deleteByName('GS_EXPORT_NAP')
+                || !Configuration::deleteByName('GS_QUANTITY')
+                || !Configuration::deleteByName('GS_FEATURED_PRODUCTS')
+                || !Configuration::deleteByName('GS_GEN_FILE_IN_ROOT')
+                || !Configuration::deleteByName('GS_FILE_PREFIX')
+                || !Configuration::deleteByName('GS_LOCAL_SHOP_CODE')
+                || !Configuration::deleteByName('GS_REVIEW_MODULES')) {
                 return false;
             }
         }
@@ -390,8 +419,20 @@ class GShoppingFlux extends Module
                 $this->_html .= $this->displayError(sprintf($this->l('Unable to update settings for the following shop: %s'), implode(', ', $errors_update_shops)));
             }
         } elseif (Tools::isSubmit('submitReviewsFluxOptions')) {
-            $this->confirm = $this->l('The settings have been updated.');
-            $this->generateXMLFiles(0, $shop_id, $shop_group_id, false, true);
+            $errors_update_shops = [];
+            $updated = true;
+            $updated &= Configuration::updateValue('GS_REVIEW_MODULES', json_encode(Tools::getValue('review_modules')), false, (int) $shop_group_id, (int) $shop_id);
+            if (!$updated) {
+                $shop = new Shop($shop_id);
+                $errors_update_shops[] = $shop->name;
+            }
+
+            if (!count($errors_update_shops)) {
+                $this->confirm = $this->l('The settings have been updated.');
+                $this->generateXMLFiles(0, $shop_id, $shop_group_id, false, true);
+            } else {
+                $this->_html .= $this->displayError(sprintf($this->l('Unable to update settings for the following shop: %s'), implode(', ', $errors_update_shops)));
+            }
         } elseif (Tools::isSubmit('updateCategory')) {
             $id_gcategory = (int) Tools::getValue('id_gcategory', 0);
             $export = (int) Tools::getValue('export', 0);
@@ -1071,7 +1112,8 @@ class GShoppingFlux extends Module
                         'label' => $this->l('Your store code'),
                         'name' => 'store_code',
                         'desc' => $this->l('Your store code'),
-                    ]],
+                    ],
+                ],
                 'submit' => [
                     'name' => 'submitLocalInventoryFluxOptions',
                     'title' => $this->l('Save & Export'),
@@ -1099,7 +1141,7 @@ class GShoppingFlux extends Module
         $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false) . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->tpl_vars = [
-            'fields_value' => $this->getConfigLocalInventoryFieldsValues($this->context->shop->id),
+            'fields_value' => $this->getConfigReviewsFieldsValues($this->context->shop->id),
             'id_language' => $this->context->language->id,
             'languages' => $this->context->controller->getLanguages(),
         ];
@@ -1112,6 +1154,20 @@ class GShoppingFlux extends Module
                 'legend' => [
                     'title' => $this->l('Reviews'),
                     'icon' => 'icon-cogs',
+                ],
+                'input' => [
+                    [
+                        'type' => 'select',
+                        'desc' => $this->l('Please select modules for reviews'),
+                        'name' => 'review_modules',
+                        'class' => 'chosen',
+                        'multiple' => true,
+                        'options' => [
+                            'query' => Module::getModulesInstalled(),
+                            'id' => 'id_module',
+                            'name' => 'name',
+                        ],
+                    ],
                 ],
                 'submit' => [
                     'name' => 'submitReviewsFluxOptions',
@@ -1227,6 +1283,16 @@ class GShoppingFlux extends Module
 
         return [
             'store_code' => $store_code,
+        ];
+    }
+
+    public function getConfigReviewsFieldsValues($shop_id)
+    {
+        $shop_group_id = Shop::getGroupFromShop($shop_id);
+        $review_modules = json_decode(Configuration::get('GS_REVIEW_MODULES', 0, $shop_group_id, $shop_id), true);
+
+        return [
+            'review_modules[]' => $review_modules,
         ];
     }
 
@@ -2451,7 +2517,7 @@ class GShoppingFlux extends Module
     private function generateReviewsFile($id_shop)
     {
         $this->shop = new Shop($id_shop);
-        $this->module_conf = $this->getConfigFieldsValues($id_shop);
+        $this->module_conf = array_merge($this->getConfigFieldsValues($id_shop), $this->getConfigReviewsFieldsValues($id_shop));
 
         // Init file_path value
         if ($this->module_conf['gen_file_in_root']) {
@@ -2483,15 +2549,35 @@ class GShoppingFlux extends Module
         fwrite($googleshoppingfile, $xml);
 
         $xml = '<reviews>' . "\n";
+        $comments = [];
 
-        $sql = 'SELECT pc.`id_product_comment`, pc.`id_product`, c.id_customer AS customer_id,
+        $review_modules = $this->module_conf['review_modules[]'];
+        $modules_name = [];
+        foreach ($review_modules as $id) {
+            $modules_name[] = Module::getInstanceById($id)->name;
+        }
+
+        foreach ($modules_name as $name) {
+            if ($name == 'productcomments') {
+                $sql = 'SELECT pc.`id_product_comment`, pc.`id_product`, c.id_customer AS customer_id,
                 IF(c.id_customer, CONCAT(c.`firstname`, \' \',  c.`lastname`), pc.customer_name) customer_name,
                 IF(c.id_customer, 0, 1) anonymous, pc.`title`, pc.`content`, pc.`grade`, pc.`date_add`
             FROM ' . _DB_PREFIX_ . 'product_comment pc
             LEFT JOIN ' . _DB_PREFIX_ . 'customer c ON pc.id_customer = c.id_customer
             WHERE pc.deleted = 0 AND pc.validate = 1';
 
-        $comments = Db::getInstance()->ExecuteS($sql);
+                $comments = array_merge($comments, Db::getInstance()->ExecuteS($sql));
+            }
+            if ($name == 'revws') {
+                $sql = 'SELECT r.id_review AS `id_product_comment`, r.id_entity AS id_product, r.id_customer AS `customer_id`,
+        r.display_name AS `customer_name`, IF(r.id_guest, 0, 1) anonymous, r.title, r.content, rg.`grade`, r.date_add
+FROM ' . _DB_PREFIX_ . 'revws_review r
+JOIN ' . _DB_PREFIX_ . 'revws_review_grade rg ON r.id_review = rg.id_review
+ WHERE r.deleted = 0 AND r.validated = 1 AND r.entity_type = \'product\' ';
+
+                $comments = array_merge($comments, Db::getInstance()->ExecuteS($sql));
+            }
+        }
 
         foreach ($comments as $comment) {
             $p = new Product($comment['id_product'], false, null, $id_shop, $this->context);
@@ -2992,7 +3078,7 @@ class GShoppingFlux extends Module
                         }
                     }
                     if (!(((float) $shipping_free_price > 0) && ($product['price'] >= (float) $shipping_free_price))
-                    && !(((float) $shipping_free_weight > 0) && ($product['weight'] >= (float) $shipping_free_weight))) {
+                        && !(((float) $shipping_free_weight > 0) && ($product['weight'] >= (float) $shipping_free_weight))) {
                         if (isset($this->ps_shipping_handling) && $carrier->shipping_handling) {
                             $shipping = (float) $this->ps_shipping_handling;
                         }
