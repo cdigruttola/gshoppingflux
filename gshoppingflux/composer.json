@@ -1,0 +1,33 @@
+{
+  "name": "cdigruttola/gshoppingflux",
+  "description": "Export your products to Google Merchant Center, easily.",
+  "authors": [
+    {
+      "name": "cdigruttola",
+      "email": "c.digruttola@hotmail.it"
+    }
+  ],
+  "require": {
+    "php": ">=8.1",
+    "jms/serializer": "^3.17"
+  },
+  "autoload": {
+    "psr-4": {
+      "cdigruttola\\GShoppingFlux\\": "src/"
+    },
+    "classmap": [
+      "gshoppingflux.php",
+      "classes/"
+    ],
+    "exclude-from-classmap": []
+  },
+  "config": {
+    "preferred-install": "dist",
+    "prepend-autoloader": false,
+    "platform": {
+      "php": "8.1"
+    }
+  },
+  "type": "prestashop-module",
+  "author": "cdigruttola"
+}

@@ -1,0 +1,10 @@
+services:
+  _defaults:
+    public: true
+
+  cdigruttola.gshoppingflux.module:
+    class: GShoppingFlux
+    factory: [ 'Module', 'getInstanceByName' ]
+    public: false
+    arguments:
+      - 'gshoppingflux'

@@ -18,16 +18,24 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    cdigruttola <c.digruttola@hotmail.it>
- *  @copyright Copyright since 2007 Carmine Di Gruttola
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    cdigruttola <c.digruttola@hotmail.it>
+ * @copyright Copyright since 2007 Carmine Di Gruttola
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
-header('Cache-Control: no-store, no-cache, must-revalidate');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
+$sql = [];
 
-header('Location: ../');
-exit;
+$sql[] = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'gshoppingflux`;';
+$sql[] = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'gshoppingflux_lc`;';
+$sql[] = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'gshoppingflux_lang`;';
+
+foreach ($sql as $query) {
+    if (!Db::getInstance()->execute($query)) {
+        return false;
+    }
+}
+
+return true;

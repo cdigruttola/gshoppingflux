@@ -1,22 +1,30 @@
 <?php
-/*
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
-*/
+/**
+ * Copyright since 2007 Carmine Di Gruttola
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author    cdigruttola <c.digruttola@hotmail.it>
+ *  @copyright Copyright since 2007 Carmine Di Gruttola
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 require dirname(__FILE__) . '/gcategories.class.php';
 require dirname(__FILE__) . '/glangandcurrency.class.php';
@@ -34,18 +42,18 @@ class GShoppingFlux extends Module
     {
         $this->name = 'gshoppingflux';
         $this->tab = 'smart_shopping';
-        $this->version = '1.7.4';
-        $this->author = 'Dim00z';
+        $this->version = '2.0.0';
+        $this->author = 'cdigruttola';
 
         $this->bootstrap = true;
         parent::__construct();
 
         $this->page = basename(__FILE__, '.php');
-        $this->displayName = $this->l('Google Shopping Flux');
-        $this->description = $this->l('Export your products to Google Merchant Center, easily.');
+        $this->displayName = $this->trans('Google Shopping Flux', [], 'Modules.gshoppingflux.Admin');
+        $this->description = $this->trans('Export your products to Google Merchant Center, easily.', [], 'Modules.gshoppingflux.Admin');
 
         $this->need_instance = 0;
-        $this->ps_versions_compliancy = ['min' => '1.5.0.0', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => _PS_VERSION_];
         $this->uri = ToolsCore::getCurrentUrlProtocolPrefix() . $this->context->shop->domain_ssl . $this->context->shop->physical_uri;
         if (empty($this->context->shop->domain_ssl)) {
             $this->uri = ToolsCore::getCurrentUrlProtocolPrefix() . $this->context->shop->domain . $this->context->shop->physical_uri;
@@ -57,14 +65,20 @@ class GShoppingFlux extends Module
         $this->free_shipping = Configuration::getMultiple(['PS_SHIPPING_FREE_PRICE', 'PS_SHIPPING_FREE_WEIGHT']);
     }
 
-    public function install($delete_params = true)
+    public function isUsingNewTranslationSystem()
     {
+        return true;
+    }
+
+    public function install()
+    {
+        include dirname(__FILE__) . '/sql/install.php';
+
         if (!parent::install()
             || !$this->registerHook('actionObjectCategoryAddAfter')
             || !$this->registerHook('actionObjectCategoryDeleteAfter')
             || !$this->registerHook('actionShopDataDuplication')
-            || !$this->registerHook('actionCarrierUpdate')
-            || !$this->installDb()) {
+            || !$this->registerHook('actionCarrierUpdate')) {
             return false;
         }
 
@@ -72,42 +86,40 @@ class GShoppingFlux extends Module
         foreach ($shops as $shop_id) {
             $shop_group_id = Shop::getGroupFromShop($shop_id);
 
-            if (!$this->initDb((int) $shop_id)) {
+            if (!$this->initDb((int)$shop_id)) {
                 return false;
             }
 
-            if ($delete_params) {
-                if (!Configuration::updateValue('GS_PRODUCT_TYPE', '', true, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_DESCRIPTION', 'short', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_SHIPPING_MODE', 'fixed', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_SHIPPING_PRICE_FIXED', '1', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_SHIPPING_PRICE', '0.00', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_SHIPPING_COUNTRY', 'UK', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_SHIPPING_COUNTRIES', '0', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_CARRIERS_EXCLUDED', '0', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_IMG_TYPE', 'large_default', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_MPN_TYPE', 'reference', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_GENDER', '', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_AGE_GROUP', '', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_ATTRIBUTES', '0', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_COLOR', '', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_MATERIAL', '', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_PATTERN', '', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_SIZE', '', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_EXPORT_MIN_PRICE', '0.00', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_NO_GTIN', '1', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_SHIPPING_DIMENSION', '1', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_NO_BRAND', '1', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_ID_EXISTS_TAG', '1', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_EXPORT_NAP', '0', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_QUANTITY', '1', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_FEATURED_PRODUCTS', '1', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_GEN_FILE_IN_ROOT', '1', false, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_FILE_PREFIX', '', true, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_LOCAL_SHOP_CODE', '', true, (int) $shop_group_id, (int) $shop_id)
-                    || !Configuration::updateValue('GS_REVIEW_MODULES', '', true, (int) $shop_group_id, (int) $shop_id)) {
-                    return false;
-                }
+            if (!Configuration::updateValue('GS_PRODUCT_TYPE', '', true, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_DESCRIPTION', 'short', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_SHIPPING_MODE', 'fixed', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_SHIPPING_PRICE_FIXED', '1', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_SHIPPING_PRICE', '0.00', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_SHIPPING_COUNTRY', 'UK', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_SHIPPING_COUNTRIES', '0', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_CARRIERS_EXCLUDED', '0', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_IMG_TYPE', 'large_default', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_MPN_TYPE', 'reference', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_GENDER', '', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_AGE_GROUP', '', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_ATTRIBUTES', '0', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_COLOR', '', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_MATERIAL', '', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_PATTERN', '', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_SIZE', '', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_EXPORT_MIN_PRICE', '0.00', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_NO_GTIN', '1', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_SHIPPING_DIMENSION', '1', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_NO_BRAND', '1', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_ID_EXISTS_TAG', '1', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_EXPORT_NAP', '0', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_QUANTITY', '1', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_FEATURED_PRODUCTS', '1', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_GEN_FILE_IN_ROOT', '1', false, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_FILE_PREFIX', '', true, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_LOCAL_SHOP_CODE', '', true, (int)$shop_group_id, (int)$shop_id)
+                || !Configuration::updateValue('GS_REVIEW_MODULES', '', true, (int)$shop_group_id, (int)$shop_id)) {
+                return false;
             }
         }
 
@@ -119,43 +131,6 @@ class GShoppingFlux extends Module
         @chmod(dirname(__FILE__) . '/export', 0755);
 
         return true;
-    }
-
-    public function installDb()
-    {
-        return Db::getInstance()->execute('
-			CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux` (
-				`id_gcategory` INT(11) UNSIGNED NOT NULL,
-				`export` INT(11) UNSIGNED NOT NULL,
-				`condition` VARCHAR( 12 ) NOT NULL,
-				`availability` VARCHAR( 12 ) NOT NULL,
-				`gender` VARCHAR( 8 ) NOT NULL,
-				`age_group` VARCHAR( 8 ) NOT NULL,
-				`color` VARCHAR( 64 ) NOT NULL,
-				`material` VARCHAR( 64 ) NOT NULL,
-				`pattern` VARCHAR( 64 ) NOT NULL,
-				`size` VARCHAR( 64 ) NOT NULL,
-				`id_shop` INT(11) UNSIGNED NOT NULL,
-		  	INDEX (`id_gcategory`, `id_shop`)
-		  	) ENGINE = ' . _MYSQL_ENGINE_ . ' CHARACTER SET utf8 COLLATE utf8_general_ci;')
-
-            && Db::getInstance()->execute('
-				CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux_lc` (
-					`id_glang` INT(11) UNSIGNED NOT NULL,
-					`id_currency` VARCHAR(255) NOT NULL,
-					`tax_included` TINYINT(1) NOT NULL,
-					`id_shop` INT(11) UNSIGNED NOT NULL,
-			  INDEX (`id_glang`, `id_shop`)
-			) ENGINE = ' . _MYSQL_ENGINE_ . ' CHARACTER SET utf8 COLLATE utf8_general_ci;')
-
-            && Db::getInstance()->execute('
-				CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux_lang` (
-					`id_gcategory` INT(11) UNSIGNED NOT NULL,
-					`id_lang` INT(11) UNSIGNED NOT NULL,
-					`id_shop` INT(11) UNSIGNED NOT NULL,
-					`gcategory` VARCHAR( 255 ) NOT NULL,
-			  INDEX (`id_gcategory`, `id_lang`, `id_shop`)
-			) ENGINE = ' . _MYSQL_ENGINE_ . ' CHARACTER SET utf8 COLLATE utf8_general_ci;');
     }
 
     public function initDb($id_shop)
@@ -210,15 +185,15 @@ class GShoppingFlux extends Module
         return true;
     }
 
-    public function uninstall($delete_params = true)
+    public function uninstall()
     {
+        include dirname(__FILE__) . '/sql/uninstall.php';
+
         if (!parent::uninstall()) {
             return false;
         }
 
-        if ($delete_params) {
-            if (!$this->uninstallDB()
-                || !Configuration::deleteByName('GS_PRODUCT_TYPE')
+            if (!Configuration::deleteByName('GS_PRODUCT_TYPE')
                 || !Configuration::deleteByName('GS_DESCRIPTION')
                 || !Configuration::deleteByName('GS_SHIPPING_MODE')
                 || !Configuration::deleteByName('GS_SHIPPING_PRICE')
@@ -247,28 +222,6 @@ class GShoppingFlux extends Module
                 || !Configuration::deleteByName('GS_LOCAL_SHOP_CODE')
                 || !Configuration::deleteByName('GS_REVIEW_MODULES')) {
                 return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function uninstallDb()
-    {
-        Db::getInstance()->execute('DROP TABLE `' . _DB_PREFIX_ . 'gshoppingflux`');
-        Db::getInstance()->execute('DROP TABLE `' . _DB_PREFIX_ . 'gshoppingflux_lc`');
-        Db::getInstance()->execute('DROP TABLE `' . _DB_PREFIX_ . 'gshoppingflux_lang`');
-
-        return true;
-    }
-
-    public function reset()
-    {
-        if (!$this->uninstall(false)) {
-            return false;
-        }
-        if (!$this->install(false)) {
-            return false;
         }
 
         return true;
