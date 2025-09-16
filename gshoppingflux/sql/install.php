@@ -28,36 +28,36 @@ if (!defined('_PS_VERSION_')) {
 
 $sql = [];
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux` (
-				`id_gcategory` INT(11) UNSIGNED NOT NULL,
-				`export` INT(11) UNSIGNED NOT NULL,
-				`condition` VARCHAR( 12 ) NOT NULL,
-				`availability` VARCHAR( 12 ) NOT NULL,
-				`gender` VARCHAR( 8 ) NOT NULL,
-				`age_group` VARCHAR( 8 ) NOT NULL,
-				`color` VARCHAR( 64 ) NOT NULL,
-				`material` VARCHAR( 64 ) NOT NULL,
-				`pattern` VARCHAR( 64 ) NOT NULL,
-				`size` VARCHAR( 64 ) NOT NULL,
-				`id_shop` INT(11) UNSIGNED NOT NULL,
-		  	INDEX (`id_gcategory`, `id_shop`)
-		  	) ENGINE = ' . _MYSQL_ENGINE_ . ' CHARACTER SET utf8 COLLATE utf8_general_ci;';
+$sql[] = 'CREATE TABLE IF NOT EXISTS `ps_gshoppingflux` (
+  `id_gcategory` INT(11) UNSIGNED NOT NULL,
+  `id_shop` INT(11) UNSIGNED NOT NULL,
+  `export` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+  `condition` VARCHAR(12) NOT NULL,
+  `availability` VARCHAR(12) NOT NULL,
+  `gender` VARCHAR(8) NOT NULL,
+  `age_group` VARCHAR(8) NOT NULL,
+  `color` VARCHAR(64) NOT NULL,
+  `material` VARCHAR(64) NOT NULL,
+  `pattern` VARCHAR(64) NOT NULL,
+  `size` VARCHAR(64) NOT NULL,
+  PRIMARY KEY (`id_gcategory`, `id_shop`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;';
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux_lc` (
-					`id_glang` INT(11) UNSIGNED NOT NULL,
-					`id_currency` VARCHAR(255) NOT NULL,
-					`tax_included` TINYINT(1) NOT NULL,
-					`id_shop` INT(11) UNSIGNED NOT NULL,
-			  INDEX (`id_glang`, `id_shop`)
-			) ENGINE = ' . _MYSQL_ENGINE_ . ' CHARACTER SET utf8 COLLATE utf8_general_ci;';
+$sql[] = 'CREATE TABLE IF NOT EXISTS `ps_gshoppingflux_lc` (
+  `id_glang` INT(11) UNSIGNED NOT NULL,
+  `id_shop` INT(11) UNSIGNED NOT NULL,
+  `id_currency` VARCHAR(255) NOT NULL,
+  `tax_included` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id_glang`, `id_shop`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;';
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux_lang` (
-					`id_gcategory` INT(11) UNSIGNED NOT NULL,
-					`id_lang` INT(11) UNSIGNED NOT NULL,
-					`id_shop` INT(11) UNSIGNED NOT NULL,
-					`gcategory` VARCHAR( 255 ) NOT NULL,
-			  INDEX (`id_gcategory`, `id_lang`, `id_shop`)
-			) ENGINE = ' . _MYSQL_ENGINE_ . ' CHARACTER SET utf8 COLLATE utf8_general_ci;';
+$sql[] = 'CREATE TABLE IF NOT EXISTS `ps_gshoppingflux_lang` (
+  `id_gcategory` INT(11) UNSIGNED NOT NULL,
+  `id_lang` INT(11) UNSIGNED NOT NULL,
+  `id_shop` INT(11) UNSIGNED NOT NULL,
+  `gcategory` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id_gcategory`, `id_lang`, `id_shop`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;';
 
 foreach ($sql as $query) {
     if (!Db::getInstance()->execute($query)) {
