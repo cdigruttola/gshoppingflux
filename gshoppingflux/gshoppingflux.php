@@ -166,7 +166,7 @@ class GShoppingFlux extends Module
             if ((!count($cat_exists) || $cat_exists === false) && ($cat['id_category'] > 0)) {
                 if ($root->id_category == $cat['id_category']) {
                     foreach ($languages as $key => $lang) {
-                        $str[$lang['id_lang']] = $this->l('Google Category Example > Google Sub-Category Example');
+                        $str[$lang['id_lang']] = $this->trans('Google Category Example > Google Sub-Category Example', [], 'Modules.gshoppingflux.Admin');
                     }
 
                     $condition = 'new';
