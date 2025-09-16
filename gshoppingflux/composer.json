@@ -16,8 +16,7 @@
       "cdigruttola\\GShoppingFlux\\": "src/"
     },
     "classmap": [
-      "gshoppingflux.php",
-      "classes/"
+      "gshoppingflux.php"
     ],
     "exclude-from-classmap": []
   },
