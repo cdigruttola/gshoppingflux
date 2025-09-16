@@ -8,3 +8,10 @@ services:
     public: false
     arguments:
       - 'gshoppingflux'
+
+  cdigruttola.gshoppingflux.repository.exported:
+    class: cdigruttola\GShoppingFlux\Repository\GshoppingfluxRepository
+    public: true
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - cdigruttola\GShoppingFlux\Entity\Gshoppingflux

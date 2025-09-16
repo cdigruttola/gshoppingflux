@@ -28,7 +28,6 @@ if (!defined('_PS_VERSION_')) {
 
 require dirname(__FILE__) . '/gcategories.class.php';
 require dirname(__FILE__) . '/glangandcurrency.class.php';
-include_once dirname(__FILE__) . '/array_column.php';
 
 class GShoppingFlux extends Module
 {

@@ -42,6 +42,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux` (
 				`id_shop` INT(11) UNSIGNED NOT NULL,
 		  	INDEX (`id_gcategory`, `id_shop`)
 		  	) ENGINE = ' . _MYSQL_ENGINE_ . ' CHARACTER SET utf8 COLLATE utf8_general_ci;';
+
 $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux_lc` (
 					`id_glang` INT(11) UNSIGNED NOT NULL,
 					`id_currency` VARCHAR(255) NOT NULL,
@@ -49,6 +50,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux_lc` (
 					`id_shop` INT(11) UNSIGNED NOT NULL,
 			  INDEX (`id_glang`, `id_shop`)
 			) ENGINE = ' . _MYSQL_ENGINE_ . ' CHARACTER SET utf8 COLLATE utf8_general_ci;';
+
 $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux_lang` (
 					`id_gcategory` INT(11) UNSIGNED NOT NULL,
 					`id_lang` INT(11) UNSIGNED NOT NULL,
@@ -56,6 +58,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'gshoppingflux_lang` (
 					`gcategory` VARCHAR( 255 ) NOT NULL,
 			  INDEX (`id_gcategory`, `id_lang`, `id_shop`)
 			) ENGINE = ' . _MYSQL_ENGINE_ . ' CHARACTER SET utf8 COLLATE utf8_general_ci;';
+
 foreach ($sql as $query) {
     if (!Db::getInstance()->execute($query)) {
         return false;
