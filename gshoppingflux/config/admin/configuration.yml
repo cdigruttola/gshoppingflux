@@ -9,7 +9,9 @@ services:
       class: cdigruttola\GShoppingFlux\Form\GShoppingFluxConfigurationType
       parent: 'form.type.translatable.aware'
       arguments:
-        - '@=service("prestashop.adapter.multistore_feature").isUsed()'
+        - '@=service("prestashop.core.form.choice_provider.country_by_id").getChoices()'
+        - '@=service("prestashop.adapter.data_provider.carrier").getActiveCarriersChoices()'
+        - '@PrestaShop\PrestaShop\Core\Form\ChoiceProvider\ImageTypeChoiceProvider'
       tags:
           - { name: form.type }
 
