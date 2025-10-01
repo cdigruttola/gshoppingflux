@@ -29,6 +29,7 @@ namespace cdigruttola\GShoppingFlux\Form;
 use cdigruttola\GShoppingFlux\Configuration\GShoppingFluxDataConfiguration;
 use ImageType;
 use PrestaShop\PrestaShop\Core\Form\ChoiceProvider\ImageTypeChoiceProvider;
+use PrestaShopBundle\Entity\Repository\ImageTypeRepository;
 use PrestaShopBundle\Form\Admin\Type\MultistoreConfigurationType;
 use PrestaShopBundle\Form\Admin\Type\TranslatableType;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
@@ -53,20 +54,18 @@ class GShoppingFluxConfigurationType extends TranslatorAwareType
      * @var array
      */
     private $carriers;
-    private $imageTypeChoiceProvider;
 
     public function __construct(
         TranslatorInterface $translator,
         array $locales,
         array $countryChoices,
         array $carriers,
-        ImageTypeChoiceProvider $imageTypeChoiceProvider,
+        private readonly ImageTypeRepository $imageTypeRepository
     ) {
         parent::__construct($translator, $locales);
 
         $this->countryChoices = [$this->trans('All', 'Modules.Gshoppingflux.Admin') => 'all'] + $countryChoices;
         $this->carriers = [$this->trans('No', 'Modules.Gshoppingflux.Admin') => 'no'] + $carriers ;
-        $this->imageTypeChoiceProvider = $imageTypeChoiceProvider;
     }
     /**
      * {@inheritdoc}
@@ -85,6 +84,13 @@ class GShoppingFluxConfigurationType extends TranslatorAwareType
             $this->trans('Price fixed', 'Modules.Gshoppingflux.Admin') => 'fixed',
             $this->trans('Generate shipping costs in several countries [EXPERIMENTAL]', 'Modules.Gshoppingflux.Admin') => 'full',
         ];
+
+        $imageTypes = [];
+        $dbImageTypes = $this->imageTypeRepository->findBy(['products' => true]);
+
+        foreach ($dbImageTypes as $dbImageType) {
+            $imageTypes[$dbImageType->getName()] = $dbImageType->getId();
+        }
 
         $builder
             ->add('product_type', TranslatableType::class, [
@@ -128,7 +134,7 @@ class GShoppingFluxConfigurationType extends TranslatorAwareType
             ])
             ->add('img_type', ChoiceType::class, [
                 'label' => $this->trans('Images type', 'Modules.Gshoppingflux.Admin'),
-                'choices' => $this->imageTypeChoiceProvider->getChoices(),
+                'choices' => $imageTypes,
                 'multistore_configuration_key' => GShoppingFluxDataConfiguration::GS_IMG_TYPE,
             ]);
     }
