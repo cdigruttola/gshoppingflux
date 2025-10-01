@@ -40,6 +40,11 @@ class GShoppingFluxDataConfiguration extends AbstractMultistoreConfiguration
     private const CONFIGURATION_FIELDS = [
         'product_type',
         'description',
+        'shipping_mode',
+        'shipping_price',
+        'shipping_country',
+        'shipping_countries',
+        'carriers_excluded',
     ];
 
     /**
@@ -50,7 +55,11 @@ class GShoppingFluxDataConfiguration extends AbstractMultistoreConfiguration
         return (new OptionsResolver())
             ->setDefined(self::CONFIGURATION_FIELDS)
             ->setAllowedTypes('product_type', 'array|string')
-            ->setAllowedTypes('description', 'string');
+            ->setAllowedTypes('description', 'string')
+            ->setAllowedTypes('shipping_mode', 'string')
+            ->setAllowedTypes('shipping_price', 'float')
+            ->setAllowedTypes('shipping_country', 'string')
+            ->setAllowedTypes('shipping_countries', 'null|array');
     }
 
     /**
@@ -63,6 +72,11 @@ class GShoppingFluxDataConfiguration extends AbstractMultistoreConfiguration
 
         $return['product_type'] = (array) $this->configuration->get(self::GS_PRODUCT_TYPE, null, $shopConstraint);
         $return['description'] = $this->configuration->get(self::GS_DESCRIPTION, null, $shopConstraint);
+        $return['shipping_mode'] = $this->configuration->get(self::GS_SHIPPING_MODE, null, $shopConstraint);
+        $return['shipping_price'] = $this->configuration->get(self::GS_SHIPPING_PRICE, null, $shopConstraint);
+        $return['shipping_country'] = $this->configuration->get(self::GS_SHIPPING_COUNTRY, null, $shopConstraint);
+        $return['shipping_countries'] = (array) $this->configuration->get(self::GS_SHIPPING_COUNTRIES, null, $shopConstraint);
+        $return['carriers_excluded'] = (array) $this->configuration->get(self::GS_CARRIERS_EXCLUDED, null, $shopConstraint);
 
         return $return;
     }
@@ -75,6 +89,11 @@ class GShoppingFluxDataConfiguration extends AbstractMultistoreConfiguration
         $shopConstraint = $this->getShopConstraint();
         $this->updateConfigurationValue(self::GS_PRODUCT_TYPE, 'product_type', $configuration, $shopConstraint);
         $this->updateConfigurationValue(self::GS_DESCRIPTION, 'description', $configuration, $shopConstraint);
+        $this->updateConfigurationValue(self::GS_SHIPPING_MODE, 'shipping_mode', $configuration, $shopConstraint);
+        $this->updateConfigurationValue(self::GS_SHIPPING_PRICE, 'shipping_price', $configuration, $shopConstraint);
+        $this->updateConfigurationValue(self::GS_SHIPPING_COUNTRY, 'shipping_country', $configuration, $shopConstraint);
+        $this->updateConfigurationValue(self::GS_SHIPPING_COUNTRIES, 'shipping_countries', $configuration, $shopConstraint);
+        $this->updateConfigurationValue(self::GS_CARRIERS_EXCLUDED, 'carriers_excluded', $configuration, $shopConstraint);
 
         return [];
     }
