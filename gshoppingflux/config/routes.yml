@@ -1,0 +1,5 @@
+gshoppingflux_configuration:
+  path: /gshoppingflux/configuration
+  methods: [GET, POST, PATCH]
+  defaults:
+    _controller: cdigruttola\GShoppingFlux\Controller\GShoppingFluxController::configAction

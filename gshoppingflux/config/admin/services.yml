@@ -1,0 +1,13 @@
+imports:
+  - { resource: configuration.yml }
+  - { resource: ../common.yml }
+
+services:
+  _defaults:
+    public: true
+
+  cdigruttola\GShoppingFlux\Controller\GShoppingFluxController:
+    public: true
+    autoconfigure: true
+    autowire: true
+    class: cdigruttola\GShoppingFlux\Controller\GShoppingFluxController

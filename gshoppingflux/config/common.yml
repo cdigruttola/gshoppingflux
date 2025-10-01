@@ -9,9 +9,30 @@ services:
     arguments:
       - 'gshoppingflux'
 
-  cdigruttola.gshoppingflux.repository.exported:
+  cdigruttola.gshoppingflux.repository.gshoppingflux:
     class: cdigruttola\GShoppingFlux\Repository\GshoppingfluxRepository
     public: true
     factory: ['@doctrine.orm.default_entity_manager', getRepository]
     arguments:
       - cdigruttola\GShoppingFlux\Entity\Gshoppingflux
+
+  cdigruttola.gshoppingflux.repository.gshoppingflux_lang:
+    class: cdigruttola\GShoppingFlux\Repository\GshoppingfluxLangRepository
+    public: true
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - cdigruttola\GShoppingFlux\Entity\GshoppingfluxLang
+
+  cdigruttola.gshoppingflux.repository.gshoppingflux_lc:
+    class: cdigruttola\GShoppingFlux\Repository\GshoppingfluxLcRepository
+    public: true
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - cdigruttola\GShoppingFlux\Entity\GshoppingfluxLc
+
+  cdigruttola.gshoppingflux.configuration.data_configuration:
+    class: cdigruttola\GShoppingFlux\Configuration\GShoppingFluxDataConfiguration
+    arguments:
+      - '@prestashop.adapter.legacy.configuration'
+      - '@prestashop.adapter.shop.context'
+      - '@prestashop.adapter.multistore_feature'

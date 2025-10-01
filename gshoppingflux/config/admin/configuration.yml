@@ -1,0 +1,24 @@
+services:
+
+  cdigruttola.gshoppingflux.configuration.provider.configuration_data_provider:
+      class: cdigruttola\GShoppingFlux\Provider\GShoppingFluxConfigurationDataProvider
+      arguments:
+          - '@cdigruttola.gshoppingflux.configuration.data_configuration'
+
+  cdigruttola\GShoppingFlux\Form\GShoppingFluxConfigurationType:
+      class: cdigruttola\GShoppingFlux\Form\GShoppingFluxConfigurationType
+      parent: 'form.type.translatable.aware'
+      arguments:
+        - '@=service("prestashop.adapter.multistore_feature").isUsed()'
+      tags:
+          - { name: form.type }
+
+  cdigruttola.gshoppingflux.configuration.handler.configuration_data_handler:
+      class: 'PrestaShop\PrestaShop\Core\Form\Handler'
+      public: true
+      arguments:
+          - '@form.factory'
+          - '@prestashop.core.hook.dispatcher'
+          - '@cdigruttola.gshoppingflux.configuration.provider.configuration_data_provider'
+          - 'cdigruttola\GShoppingFlux\Form\GShoppingFluxConfigurationType'
+          - 'GShoppingFluxForm'

@@ -6,10 +6,25 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitfc697246be7da2a818bcbd478ce0b921
 {
+    public static $files = array (
+        '383eaff206634a77a1be54e64e6459c7' => __DIR__ . '/..' . '/sabre/uri/lib/functions.php',
+        '3569eecfeed3bcf0bad3c998a494ecb8' => __DIR__ . '/..' . '/sabre/xml/lib/Deserializer/functions.php',
+        '93aa591bc4ca510c520999e34229ee79' => __DIR__ . '/..' . '/sabre/xml/lib/Serializer/functions.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'c' => 
         array (
             'cdigruttola\\GShoppingFlux\\' => 26,
+        ),
+        'V' => 
+        array (
+            'Vitalybaev\\GoogleMerchant\\' => 26,
+        ),
+        'S' => 
+        array (
+            'Sabre\\Xml\\' => 10,
+            'Sabre\\Uri\\' => 10,
         ),
     );
 
@@ -18,12 +33,60 @@ class ComposerStaticInitfc697246be7da2a818bcbd478ce0b921
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
+        'Vitalybaev\\GoogleMerchant\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src',
+        ),
+        'Sabre\\Xml\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sabre/xml/lib',
+        ),
+        'Sabre\\Uri\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sabre/uri/lib',
+        ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'GShoppingFlux' => __DIR__ . '/../..' . '/gshoppingflux.php',
+        'Sabre\\Uri\\InvalidUriException' => __DIR__ . '/..' . '/sabre/uri/lib/InvalidUriException.php',
+        'Sabre\\Uri\\Version' => __DIR__ . '/..' . '/sabre/uri/lib/Version.php',
+        'Sabre\\Xml\\ContextStackTrait' => __DIR__ . '/..' . '/sabre/xml/lib/ContextStackTrait.php',
+        'Sabre\\Xml\\Element' => __DIR__ . '/..' . '/sabre/xml/lib/Element.php',
+        'Sabre\\Xml\\Element\\Base' => __DIR__ . '/..' . '/sabre/xml/lib/Element/Base.php',
+        'Sabre\\Xml\\Element\\Cdata' => __DIR__ . '/..' . '/sabre/xml/lib/Element/Cdata.php',
+        'Sabre\\Xml\\Element\\Elements' => __DIR__ . '/..' . '/sabre/xml/lib/Element/Elements.php',
+        'Sabre\\Xml\\Element\\KeyValue' => __DIR__ . '/..' . '/sabre/xml/lib/Element/KeyValue.php',
+        'Sabre\\Xml\\Element\\Uri' => __DIR__ . '/..' . '/sabre/xml/lib/Element/Uri.php',
+        'Sabre\\Xml\\Element\\XmlFragment' => __DIR__ . '/..' . '/sabre/xml/lib/Element/XmlFragment.php',
+        'Sabre\\Xml\\LibXMLException' => __DIR__ . '/..' . '/sabre/xml/lib/LibXMLException.php',
+        'Sabre\\Xml\\ParseException' => __DIR__ . '/..' . '/sabre/xml/lib/ParseException.php',
+        'Sabre\\Xml\\Reader' => __DIR__ . '/..' . '/sabre/xml/lib/Reader.php',
+        'Sabre\\Xml\\Service' => __DIR__ . '/..' . '/sabre/xml/lib/Service.php',
+        'Sabre\\Xml\\Version' => __DIR__ . '/..' . '/sabre/xml/lib/Version.php',
+        'Sabre\\Xml\\Writer' => __DIR__ . '/..' . '/sabre/xml/lib/Writer.php',
+        'Sabre\\Xml\\XmlDeserializable' => __DIR__ . '/..' . '/sabre/xml/lib/XmlDeserializable.php',
+        'Sabre\\Xml\\XmlSerializable' => __DIR__ . '/..' . '/sabre/xml/lib/XmlSerializable.php',
+        'Vitalybaev\\GoogleMerchant\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src/Exception/InvalidArgumentException.php',
+        'Vitalybaev\\GoogleMerchant\\Feed' => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src/Feed.php',
+        'Vitalybaev\\GoogleMerchant\\HasProperties' => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src/HasProperties.php',
+        'Vitalybaev\\GoogleMerchant\\Product' => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src/Product.php',
+        'Vitalybaev\\GoogleMerchant\\ProductProperty' => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src/ProductProperty.php',
+        'Vitalybaev\\GoogleMerchant\\Product\\Availability\\Availability' => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src/Product/Availability/Availability.php',
+        'Vitalybaev\\GoogleMerchant\\Product\\Condition' => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src/Product/Condition.php',
+        'Vitalybaev\\GoogleMerchant\\Product\\Shipping' => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src/Product/Shipping.php',
+        'Vitalybaev\\GoogleMerchant\\PropertyBag' => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src/PropertyBag.php',
+        'Vitalybaev\\GoogleMerchant\\RssElement' => __DIR__ . '/..' . '/vitalybaev/google-merchant-feed/src/RssElement.php',
+        'cdigruttola\\GShoppingFlux\\Configuration\\GShoppingFluxDataConfiguration' => __DIR__ . '/../..' . '/src/Configuration/GShoppingFluxDataConfiguration.php',
+        'cdigruttola\\GShoppingFlux\\Controller\\GShoppingFluxController' => __DIR__ . '/../..' . '/src/Controller/GShoppingFluxController.php',
         'cdigruttola\\GShoppingFlux\\Entity\\Gshoppingflux' => __DIR__ . '/../..' . '/src/Entity/Gshoppingflux.php',
+        'cdigruttola\\GShoppingFlux\\Entity\\GshoppingfluxLang' => __DIR__ . '/../..' . '/src/Entity/GshoppingfluxLang.php',
+        'cdigruttola\\GShoppingFlux\\Entity\\GshoppingfluxLc' => __DIR__ . '/../..' . '/src/Entity/GshoppingfluxLc.php',
+        'cdigruttola\\GShoppingFlux\\Form\\GShoppingFluxConfigurationType' => __DIR__ . '/../..' . '/src/Form/GShoppingFluxConfigurationType.php',
+        'cdigruttola\\GShoppingFlux\\Provider\\GShoppingFluxConfigurationDataProvider' => __DIR__ . '/../..' . '/src/Provider/GShoppingFluxConfigurationDataProvider.php',
+        'cdigruttola\\GShoppingFlux\\Repository\\GshoppingfluxLangRepository' => __DIR__ . '/../..' . '/src/Repository/GshoppingfluxLangRepository.php',
+        'cdigruttola\\GShoppingFlux\\Repository\\GshoppingfluxLcRepository' => __DIR__ . '/../..' . '/src/Repository/GshoppingfluxLcRepository.php',
         'cdigruttola\\GShoppingFlux\\Repository\\GshoppingfluxRepository' => __DIR__ . '/../..' . '/src/Repository/GshoppingfluxRepository.php',
     );
 

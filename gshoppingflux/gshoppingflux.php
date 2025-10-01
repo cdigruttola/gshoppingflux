@@ -32,6 +32,11 @@ require dirname(__FILE__) . '/glangandcurrency.class.php';
 class GShoppingFlux extends Module
 {
     private $_html = '';
+    private $uri;
+    private $ps_stock_management;
+    private $ps_shipping_handling;
+    private $free_shipping;
+    private $categories_values = [];
     private $user_groups;
 
     const CHARSET = 'UTF-8';
@@ -47,18 +52,16 @@ class GShoppingFlux extends Module
         $this->bootstrap = true;
         parent::__construct();
 
-        $this->page = basename(__FILE__, '.php');
         $this->displayName = $this->trans('Google Shopping Flux', [], 'Modules.gshoppingflux.Admin');
         $this->description = $this->trans('Export your products to Google Merchant Center, easily.', [], 'Modules.gshoppingflux.Admin');
 
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => _PS_VERSION_];
+
         $this->uri = ToolsCore::getCurrentUrlProtocolPrefix() . $this->context->shop->domain_ssl . $this->context->shop->physical_uri;
         if (empty($this->context->shop->domain_ssl)) {
             $this->uri = ToolsCore::getCurrentUrlProtocolPrefix() . $this->context->shop->domain . $this->context->shop->physical_uri;
         }
-        $this->categories_values = [];
-
         $this->ps_stock_management = Configuration::get('PS_STOCK_MANAGEMENT');
         $this->ps_shipping_handling = (float) Configuration::get('PS_SHIPPING_HANDLING');
         $this->free_shipping = Configuration::getMultiple(['PS_SHIPPING_FREE_PRICE', 'PS_SHIPPING_FREE_WEIGHT']);
@@ -282,9 +285,9 @@ class GShoppingFlux extends Module
         $id_carrier_old = (int) $params['id_carrier'];
         $id_carrier_new = (int) $params['carrier']->id;
         $carriers_excluded = explode(';', Configuration::get('GS_CARRIERS_EXCLUDED', 0, $shop_group_id, $shop_id));
-        if ($key = array_search($id_carrier_old, $carriers_excluded) !== false) {
+        if ($key = in_array($id_carrier_old, $carriers_excluded)) {
             unset($carriers_excluded[$key]);
-            array_push($carriers_excluded, $id_carrier_new);
+            $carriers_excluded[] = $id_carrier_new;
             Configuration::updateValue('GS_CARRIERS_EXCLUDED', implode(';', $carriers_excluded), false, (int) $shop_group_id, (int) $shop_id);
         }
     }
@@ -515,11 +518,11 @@ class GShoppingFlux extends Module
         $shop_info = null;
 
         if (Shop::getContext() == Shop::CONTEXT_SHOP) {
-            $shop_info = sprintf($this->l('The modifications will be applied to shop: %s'), $this->context->shop->name);
+            $shop_info = $this->trans('The modifications will be applied to shop: %s', [$this->context->shop->name], 'Modules.gshoppingflux.Admin');
         } elseif (Shop::getContext() == Shop::CONTEXT_GROUP) {
-            $shop_info = sprintf($this->l('The modifications will be applied to this group: %s'), Shop::getContextShopGroup()->name);
+            $shop_info = $this->trans('The modifications will be applied to this group: %s', [Shop::getContextShopGroup()->name], 'Modules.gshoppingflux.Admin');
         } else {
-            $shop_info = $this->l('The modifications will be applied to all shops');
+            $shop_info = $this->trans('The modifications will be applied to all shops', [], 'Modules.gshoppingflux.Admin');
         }
 
         return '<div class="alert alert-info">' . $shop_info . '</div>';

@@ -7,4 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'cdigruttola\\GShoppingFlux\\' => array($baseDir . '/src'),
+    'Vitalybaev\\GoogleMerchant\\' => array($vendorDir . '/vitalybaev/google-merchant-feed/src'),
+    'Sabre\\Xml\\' => array($vendorDir . '/sabre/xml/lib'),
+    'Sabre\\Uri\\' => array($vendorDir . '/sabre/uri/lib'),
 );
