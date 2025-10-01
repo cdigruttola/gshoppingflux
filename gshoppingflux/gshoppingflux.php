@@ -22,6 +22,9 @@
  *  @copyright Copyright since 2007 Carmine Di Gruttola
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -294,6 +297,12 @@ class GShoppingFlux extends Module
 
     public function getContent()
     {
+        Tools::redirectAdmin(
+            SymfonyContainer::getInstance()
+                ->get('router')
+                ->generate('gshoppingflux_configuration')
+        );
+
         $id_lang = $this->context->language->id;
         $languages = $this->context->controller->getLanguages();
         $shops = Shop::getShops(true, null, true);

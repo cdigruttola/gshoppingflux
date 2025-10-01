@@ -1,4 +1,3 @@
-<?php
 /**
  * Copyright since 2007 Carmine Di Gruttola
  *
@@ -21,37 +20,19 @@
  *  @author    cdigruttola <c.digruttola@hotmail.it>
  *  @copyright Copyright since 2007 Carmine Di Gruttola
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *
  */
-declare(strict_types=1);
 
-namespace cdigruttola\GShoppingFlux\Provider;
+import FormSubmitButton from '@PSJs/components/form-submit-button';
 
-use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
-use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
+const {$} = window
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
-
-class GShoppingFluxConfigurationDataProvider implements FormDataProviderInterface
-{
-    /**
-     * @var DataConfigurationInterface
-     */
-    private $dataConfiguration;
-
-    public function __construct(DataConfigurationInterface $dataConfiguration)
-    {
-        $this->dataConfiguration = $dataConfiguration;
-    }
-
-    public function getData(): array
-    {
-        return $this->dataConfiguration->getConfiguration();
-    }
-
-    public function setData(array $data)
-    {
-        return $this->dataConfiguration->updateConfiguration($data);
-    }
-}
+$(() => {
+    window.prestashop.component.initComponents(
+        [
+            "TinyMCEEditor"
+        ],
+    );
+    new TranslatableInput();
+    new FormSubmitButton();
+});

@@ -22,36 +22,12 @@
  *  @copyright Copyright since 2007 Carmine Di Gruttola
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-declare(strict_types=1);
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
-namespace cdigruttola\GShoppingFlux\Provider;
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
 
-use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
-use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
-
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
-
-class GShoppingFluxConfigurationDataProvider implements FormDataProviderInterface
-{
-    /**
-     * @var DataConfigurationInterface
-     */
-    private $dataConfiguration;
-
-    public function __construct(DataConfigurationInterface $dataConfiguration)
-    {
-        $this->dataConfiguration = $dataConfiguration;
-    }
-
-    public function getData(): array
-    {
-        return $this->dataConfiguration->getConfiguration();
-    }
-
-    public function setData(array $data)
-    {
-        return $this->dataConfiguration->updateConfiguration($data);
-    }
-}
+header('Location: ../');
+exit;
