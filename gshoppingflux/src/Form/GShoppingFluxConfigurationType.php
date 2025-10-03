@@ -158,30 +158,36 @@ class GShoppingFluxConfigurationType extends TranslatorAwareType
             ->add('gender', FeatureChoiceType::class, [
                 'label' => $this->trans('Products gender feature', 'Modules.Gshoppingflux.Admin'),
                 'multistore_configuration_key' => GShoppingFluxDataConfiguration::GS_GENDER,
+                'required' => false,
             ])
             ->add('age_group', FeatureChoiceType::class, [
                 'label' => $this->trans('Products age group feature', 'Modules.Gshoppingflux.Admin'),
                 'multistore_configuration_key' => GShoppingFluxDataConfiguration::GS_AGE_GROUP,
+                'required' => false,
             ])
             ->add('colors', FeatureChoiceType::class, [
                 'label' => $this->trans('Products color feature', 'Modules.Gshoppingflux.Admin'),
                 'multiple' => true,
                 'multistore_configuration_key' => GShoppingFluxDataConfiguration::GS_COLOR,
+                'required' => false,
             ])
             ->add('materials', FeatureChoiceType::class, [
                 'label' => $this->trans('Products material feature', 'Modules.Gshoppingflux.Admin'),
                 'multiple' => true,
                 'multistore_configuration_key' => GShoppingFluxDataConfiguration::GS_MATERIAL,
+                'required' => false,
             ])
             ->add('patterns', FeatureChoiceType::class, [
                 'label' => $this->trans('Products pattern feature', 'Modules.Gshoppingflux.Admin'),
                 'multiple' => true,
                 'multistore_configuration_key' => GShoppingFluxDataConfiguration::GS_PATTERN,
+                'required' => false,
             ])
             ->add('sizes', FeatureChoiceType::class, [
                 'label' => $this->trans('Products size feature', 'Modules.Gshoppingflux.Admin'),
                 'multiple' => true,
                 'multistore_configuration_key' => GShoppingFluxDataConfiguration::GS_SIZE,
+                'required' => false,
             ])
             ->add('export_attributes', SwitchType::class, [
                 'label' => $this->trans('Export attributes combinations', 'Modules.Gshoppingflux.Admin'),
@@ -233,6 +239,7 @@ class GShoppingFluxConfigurationType extends TranslatorAwareType
                 'label' => $this->trans('Automatic export on saves?', 'Modules.Gshoppingflux.Admin'),
                 'help' => $this->trans('When disabled, you have to "Save & Export" manually or run the CRON job, to generate new files.', 'Modules.Gshoppingflux.Admin'),
                 'multistore_configuration_key' => GShoppingFluxDataConfiguration::GS_AUTOEXPORT_ON_SAVE,
+                'required' => false,
             ])
             ->add('store_code', TextType::class, [
                 'label' => $this->trans('Your store code', 'Modules.Gshoppingflux.Admin'),
