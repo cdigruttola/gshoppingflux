@@ -23,6 +23,7 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
+use cdigruttola\GShoppingFlux\Configuration\GShoppingFluxDataConfiguration;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 
 if (!defined('_PS_VERSION_')) {
@@ -92,38 +93,6 @@ class GShoppingFlux extends Module
             $shop_group_id = Shop::getGroupFromShop($shop_id);
 
             if (!$this->initDb((int) $shop_id)) {
-                return false;
-            }
-
-            if (!Configuration::updateValue('GS_PRODUCT_TYPE', '', true, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_DESCRIPTION', 'short', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_SHIPPING_MODE', 'fixed', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_SHIPPING_PRICE_FIXED', '1', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_SHIPPING_PRICE', '0.00', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_SHIPPING_COUNTRY', 'UK', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_SHIPPING_COUNTRIES', '0', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_CARRIERS_EXCLUDED', '0', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_IMG_TYPE', 'large_default', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_MPN_TYPE', 'reference', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_GENDER', '', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_AGE_GROUP', '', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_ATTRIBUTES', '0', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_COLOR', '', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_MATERIAL', '', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_PATTERN', '', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_SIZE', '', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_EXPORT_MIN_PRICE', '0.00', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_NO_GTIN', '1', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_SHIPPING_DIMENSION', '1', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_NO_BRAND', '1', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_ID_EXISTS_TAG', '1', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_EXPORT_NAP', '0', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_QUANTITY', '1', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_FEATURED_PRODUCTS', '1', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_GEN_FILE_IN_ROOT', '1', false, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_FILE_PREFIX', '', true, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_LOCAL_SHOP_CODE', '', true, (int) $shop_group_id, (int) $shop_id)
-                || !Configuration::updateValue('GS_REVIEW_MODULES', '', true, (int) $shop_group_id, (int) $shop_id)) {
                 return false;
             }
         }
@@ -198,34 +167,34 @@ class GShoppingFlux extends Module
             return false;
         }
 
-        if (!Configuration::deleteByName('GS_PRODUCT_TYPE')
-            || !Configuration::deleteByName('GS_DESCRIPTION')
-            || !Configuration::deleteByName('GS_SHIPPING_MODE')
-            || !Configuration::deleteByName('GS_SHIPPING_PRICE')
-            || !Configuration::deleteByName('GS_SHIPPING_COUNTRY')
-            || !Configuration::deleteByName('GS_SHIPPING_COUNTRIES')
-            || !Configuration::deleteByName('GS_CARRIERS_EXCLUDED')
-            || !Configuration::deleteByName('GS_IMG_TYPE')
-            || !Configuration::deleteByName('GS_MPN_TYPE')
-            || !Configuration::deleteByName('GS_GENDER')
-            || !Configuration::deleteByName('GS_AGE_GROUP')
-            || !Configuration::deleteByName('GS_ATTRIBUTES')
-            || !Configuration::deleteByName('GS_COLOR')
-            || !Configuration::deleteByName('GS_MATERIAL')
-            || !Configuration::deleteByName('GS_PATTERN')
-            || !Configuration::deleteByName('GS_SIZE')
-            || !Configuration::deleteByName('GS_EXPORT_MIN_PRICE')
-            || !Configuration::deleteByName('GS_NO_GTIN')
-            || !Configuration::deleteByName('GS_SHIPPING_DIMENSION')
-            || !Configuration::deleteByName('GS_NO_BRAND')
-            || !Configuration::deleteByName('GS_ID_EXISTS_TAG')
-            || !Configuration::deleteByName('GS_EXPORT_NAP')
-            || !Configuration::deleteByName('GS_QUANTITY')
-            || !Configuration::deleteByName('GS_FEATURED_PRODUCTS')
-            || !Configuration::deleteByName('GS_GEN_FILE_IN_ROOT')
-            || !Configuration::deleteByName('GS_FILE_PREFIX')
-            || !Configuration::deleteByName('GS_LOCAL_SHOP_CODE')
-            || !Configuration::deleteByName('GS_REVIEW_MODULES')) {
+        if (!Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_PRODUCT_TYPE)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_DESCRIPTION)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_SHIPPING_MODE)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_SHIPPING_PRICE)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_SHIPPING_COUNTRY)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_SHIPPING_COUNTRIES)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_CARRIERS_EXCLUDED)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_IMG_TYPE)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_MPN_TYPE)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_GENDER)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_AGE_GROUP)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_ATTRIBUTES)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_COLOR)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_MATERIAL)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_PATTERN)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_SIZE)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_EXPORT_MIN_PRICE)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_NO_GTIN)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_SHIPPING_DIMENSION)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_NO_BRAND)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_ID_EXISTS_TAG)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_EXPORT_NAP)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_QUANTITY)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_FEATURED_PRODUCTS)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_GEN_FILE_IN_ROOT)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_FILE_PREFIX)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_LOCAL_SHOP_CODE)
+            || !Configuration::deleteByName(GShoppingFluxDataConfiguration::GS_REVIEW_MODULES)) {
             return false;
         }
 
@@ -304,10 +273,8 @@ class GShoppingFlux extends Module
         );
 
         $id_lang = $this->context->language->id;
-        $languages = $this->context->controller->getLanguages();
         $shops = Shop::getShops(true, null, true);
         $shop_id = $this->context->shop->id;
-        $shop_group_id = Shop::getGroupFromShop($shop_id);
 
         $gcategories = Tools::getValue('gcategory') ? array_filter(Tools::getValue('gcategory'), 'strlen') : [];
         if (count($shops) > 1 && Shop::getContext() != 1) {
@@ -318,128 +285,6 @@ class GShoppingFlux extends Module
 
         if (Shop::isFeatureActive()) {
             $this->_html .= $this->getCurrentShopInfoMsg();
-        }
-
-        if (Tools::isSubmit('submitFluxOptions')) {
-            $errors_update_shops = [];
-            $updated = true;
-            $product_type_lang = Tools::getValue('product_type');
-            foreach ($languages as $k => $lang) {
-                $product_type[$lang['id_lang']] = $product_type_lang[$k];
-            }
-
-            $updated &= Configuration::updateValue('GS_PRODUCT_TYPE', $product_type, false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_DESCRIPTION', Tools::getValue('description'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_SHIPPING_MODE', Tools::getValue('shipping_mode'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_SHIPPING_PRICE', (float) Tools::getValue('shipping_price'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_SHIPPING_COUNTRY', Tools::getValue('shipping_country'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_SHIPPING_COUNTRIES', implode(';', Tools::getValue('shipping_countries')), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_CARRIERS_EXCLUDED', implode(';', Tools::getValue('carriers_excluded')), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_IMG_TYPE', Tools::getValue('img_type'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_MPN_TYPE', Tools::getValue('mpn_type'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_GENDER', Tools::getValue('gender'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_AGE_GROUP', Tools::getValue('age_group'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_ATTRIBUTES', Tools::getValue('export_attributes'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_COLOR', implode(';', Tools::getValue('color')), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_MATERIAL', implode(';', Tools::getValue('material')), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_PATTERN', implode(';', Tools::getValue('pattern')), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_SIZE', implode(';', Tools::getValue('size')), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_EXPORT_MIN_PRICE', (float) Tools::getValue('export_min_price'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_NO_GTIN', (bool) Tools::getValue('no_gtin'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_SHIPPING_DIMENSION', (bool) Tools::getValue('shipping_dimension'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_NO_BRAND', (bool) Tools::getValue('no_brand'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_ID_EXISTS_TAG', (bool) Tools::getValue('id_exists_tag'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_EXPORT_NAP', (bool) Tools::getValue('export_nap'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_QUANTITY', (bool) Tools::getValue('quantity'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_FEATURED_PRODUCTS', (bool) Tools::getValue('featured_products'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_GEN_FILE_IN_ROOT', (bool) Tools::getValue('gen_file_in_root'), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_FILE_PREFIX', trim(Tools::getValue('file_prefix')), false, (int) $shop_group_id, (int) $shop_id);
-            $updated &= Configuration::updateValue('GS_AUTOEXPORT_ON_SAVE', (bool) Tools::getValue('autoexport_on_save'), false, (int) $shop_group_id, (int) $shop_id);
-
-            if (!$updated) {
-                $shop = new Shop($shop_id);
-                $errors_update_shops[] = $shop->name;
-            }
-
-            if (!count($errors_update_shops)) {
-                $this->confirm = $this->l('The settings have been updated.');
-                $this->generateXMLFiles(0, $shop_id, $shop_group_id);
-            } else {
-                $this->_html .= $this->displayError(sprintf($this->l('Unable to update settings for the following shop: %s'), implode(', ', $errors_update_shops)));
-            }
-        } elseif (Tools::isSubmit('submitLocalInventoryFluxOptions')) {
-            $errors_update_shops = [];
-            $updated = true;
-            $updated &= Configuration::updateValue('GS_LOCAL_SHOP_CODE', Tools::getValue('store_code'), false, (int) $shop_group_id, (int) $shop_id);
-            if (!$updated) {
-                $shop = new Shop($shop_id);
-                $errors_update_shops[] = $shop->name;
-            }
-
-            if (!count($errors_update_shops)) {
-                $this->confirm = $this->l('The settings have been updated.');
-                $this->generateXMLFiles(0, $shop_id, $shop_group_id, true);
-            } else {
-                $this->_html .= $this->displayError(sprintf($this->l('Unable to update settings for the following shop: %s'), implode(', ', $errors_update_shops)));
-            }
-        } elseif (Tools::isSubmit('submitReviewsFluxOptions')) {
-            $errors_update_shops = [];
-            $updated = true;
-            $updated &= Configuration::updateValue('GS_REVIEW_MODULES', json_encode(Tools::getValue('review_modules')), false, (int) $shop_group_id, (int) $shop_id);
-            if (!$updated) {
-                $shop = new Shop($shop_id);
-                $errors_update_shops[] = $shop->name;
-            }
-
-            if (!count($errors_update_shops)) {
-                $this->confirm = $this->l('The settings have been updated.');
-                $this->generateXMLFiles(0, $shop_id, $shop_group_id, false, true);
-            } else {
-                $this->_html .= $this->displayError(sprintf($this->l('Unable to update settings for the following shop: %s'), implode(', ', $errors_update_shops)));
-            }
-        } elseif (Tools::isSubmit('updateCategory')) {
-            $id_gcategory = (int) Tools::getValue('id_gcategory', 0);
-            $export = (int) Tools::getValue('export', 0);
-            $condition = Tools::getValue('condition');
-            $availability = Tools::getValue('availability');
-            $gender = Tools::getValue('gender');
-            $age_group = Tools::getValue('age_group');
-            $color = implode(';', Tools::getValue('color'));
-            $material = implode(';', Tools::getValue('material'));
-            $pattern = implode(';', Tools::getValue('pattern'));
-            $size = implode(';', Tools::getValue('size'));
-            $id_shop = (int) Shop::getContextShopID();
-
-            if (Tools::isSubmit('updatecateg')) {
-                $gcateg = [];
-                foreach (Language::getLanguages(false) as $lang) {
-                    $gcateg[$lang['id_lang']] = Tools::getValue('gcategory_' . (int) $lang['id_lang']);
-                }
-
-                GCategories::update($id_gcategory, $gcateg, $export, $condition, $availability, $gender, $age_group, $color, $material, $pattern, $size, $id_shop);
-                $this->confirm = $this->l('Google category has been updated.');
-            }
-            if (Configuration::get('GS_AUTOEXPORT_ON_SAVE', 0, $shop_group_id, $shop_id) == 1) {
-                $this->generateXMLFiles(0, $shop_id, $shop_group_id);
-            }
-        } elseif (Tools::isSubmit('updateLanguage')) {
-            $id_glang = (int) Tools::getValue('id_glang', 0);
-            $currencies = implode(';', Tools::getValue('currencies'));
-            $tax_included = (int) Tools::getValue('tax_included', 0);
-            $export = (int) Tools::getValue('active', 0);
-            if (Tools::isSubmit('updatelang')) {
-                GLangAndCurrency::update($id_glang, $currencies, $tax_included, (int) Shop::getContextShopID());
-                if (count(Tools::getValue('currencies')) > 1) {
-                    $this->confirm = $this->l('Selected currencies for this language have been saved.');
-                } else {
-                    $this->confirm = $this->l('Selected currency for this language has been saved.');
-                }
-            }
-            if ($export && Configuration::get('GS_AUTOEXPORT_ON_SAVE', 0, $shop_group_id, $shop_id) == 1) {
-                $this->generateXMLFiles($id_glang, $shop_id, $shop_group_id);
-            } else {
-                $this->_html .= $this->displayConfirmation(html_entity_decode($this->confirm));
-            }
         }
 
         $gcategories = GCategories::gets((int) $id_lang, null, (int) $shop_id);
@@ -454,15 +299,11 @@ class GShoppingFlux extends Module
             $this->_html .= $this->renderLangForm();
             $this->_html .= $this->renderLangList();
         } else {
-            $this->_html .= $this->renderForm();
-            $this->_html .= $this->renderLocalInventoryForm();
             $this->_html .= $this->renderReviewsForm();
             $this->_html .= $this->renderCategList();
             $this->_html .= $this->renderLangList();
             $this->_html .= $this->renderInfo();
         }
-
-        return $this->_html;
     }
 
     private function generateXMLFiles($lang_id, $shop_id, $shop_group_id, $local_inventory = false, $reviews = false)
@@ -567,529 +408,6 @@ class GShoppingFlux extends Module
 			ORDER BY fp.id_feature ASC');
     }
 
-    public function renderForm()
-    {
-        $helper = new HelperForm();
-        $helper->show_toolbar = false;
-        $helper->table = $this->table;
-
-        $lang = new Language((int) Configuration::get('PS_LANG_DEFAULT'));
-        $helper->default_form_language = $lang->id;
-        $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
-        $this->fields_form = [];
-        $helper->module = $this;
-        $helper->identifier = $this->identifier;
-        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false) . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
-        $helper->token = Tools::getAdminTokenLite('AdminModules');
-        $helper->tpl_vars = [
-            'fields_value' => $this->getConfigFieldsValues($this->context->shop->id),
-            'id_language' => $this->context->language->id,
-            'languages' => $this->context->controller->getLanguages(),
-        ];
-
-        $id_lang = $this->context->language->id;
-        $id_shop = $this->context->shop->id;
-        $img_types = ImageType::getImagesTypes('products');
-
-        $features = [
-            [
-                'id_feature' => '',
-                'name' => $this->l('Product feature doesn\'t exist'),
-            ],
-        ];
-        $features = array_merge($features, $this->getShopFeatures($id_lang, $id_shop));
-        $descriptions = [
-            [
-                'id_desc' => 'short',
-                'name' => $this->l('Short description'),
-            ],
-            [
-                'id_desc' => 'long',
-                'name' => $this->l('Long description'),
-            ],
-            [
-                'id_desc' => 'short+long',
-                'name' => $this->l('Short and long description'),
-            ],
-            [
-                'id_desc' => 'meta',
-                'name' => $this->l('Meta description'),
-            ],
-        ];
-        $mpn_types = [
-            [
-                'id_mpn' => 'reference',
-                'name' => $this->l('Reference'),
-            ],
-            [
-                'id_mpn' => 'supplier_reference',
-                'name' => $this->l('Supplier reference'),
-            ],
-        ];
-        $form_desc = html_entity_decode($this->l('Please visit and read the <a href="http://support.google.com/merchants/answer/188494" target="_blank">Google Shopping Products Feed Specification</a> if you don\'t know how to configure these options. <br/> If all your shop products match the same Google Shopping category, you can attach it to your home category in the table below, sub-categories will automatically get the same setting. No need to fill each Google category field. <br/> Products in categories with no Google category specified are exported in the Google Shopping category linked to the nearest parent.'));
-
-        $fields_form = [
-            'form' => [
-                'legend' => [
-                    'title' => $this->l('Parameters'),
-                    'icon' => 'icon-cogs',
-                ],
-                'input' => [
-                    [
-                        'type' => 'text',
-                        'label' => $this->l('Default product type'),
-                        'name' => 'product_type[]',
-                        // 'class' => 'fixed-width-xl',
-                        'lang' => true,
-                        'desc' => $this->l('Your shop\'s default product type, ie: if you sell pants and shirts, and your main categories are "Men", "Women", "Kids", enter "Clothing" here. That will be exported as your shop main category. This setting is optional and can be left empty. Besides the module requires that at least main category of your shop is correctly linked to a Google product category.'),
-                    ],
-                    [
-                        'type' => 'select',
-                        'label' => $this->l('Description type'),
-                        'name' => 'description',
-                        'default_value' => $helper->tpl_vars['fields_value']['description'],
-                        'options' => [
-                            // 'default' => array('value' => 0, 'label' => $this->l('Choose description type')),
-                            'query' => $descriptions,
-                            'id' => 'id_desc',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'select',
-                        'label' => $this->l('Shipping Methods'),
-                        'name' => 'shipping_mode',
-                        'options' => [
-                            'query' => [
-                                [
-                                    'id_mode' => 'none',
-                                    'name' => $this->l('No shipping method'),
-                                ],
-                                [
-                                    'id_mode' => 'fixed',
-                                    'name' => $this->l('Price fixed'),
-                                ],
-                                [
-                                    'id_mode' => 'full',
-                                    'name' => $this->l('Generate shipping costs in several countries [EXPERIMENTAL]'),
-                                ],
-                            ],
-                            'id' => 'id_mode',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'text',
-                        'label' => $this->l('Shipping price'),
-                        'name' => 'shipping_price',
-                        'class' => 'fixed-width-xs',
-                        'prefix' => $this->context->currency->sign,
-                        'desc' => $this->l('This field is used for "Price fixed".'),
-                    ],
-                    [
-                        'type' => 'text',
-                        'label' => $this->l('Shipping country'),
-                        'name' => 'shipping_country',
-                        'class' => 'fixed-width-xs',
-                        // 'suffix' => strtoupper($this->context->language->iso_code),
-                        'desc' => $this->l('This field is used for "Price fixed".'),
-                    ],
-                    [
-                        'type' => 'select',
-                        'multiple' => true,
-                        'label' => $this->l('Shipping countries'),
-                        'name' => 'shipping_countries[]',
-                        'options' => [
-                            'query' => array_merge([
-                                [
-                                    'id_country' => 'all',
-                                    'name' => $this->l('All'),
-                                ],
-                            ], Country::getCountries($this->context->language->id, true)),
-                            'id' => 'id_country',
-                            'name' => 'name',
-                        ],
-                        'desc' => $this->l('This field is used for "Generate shipping costs in several countries". Hold [Ctrl] key pressed to select multiple country.'),
-                    ],
-                    [
-                        'type' => 'select',
-                        'multiple' => true,
-                        'label' => $this->l('Carriers to exclude'),
-                        'name' => 'carriers_excluded[]',
-                        'options' => [
-                            'query' => array_merge([
-                                [
-                                    'id_carrier' => 'no',
-                                    'name' => $this->l('No'),
-                                ],
-                            ], Carrier::getCarriers($this->context->language->id, false, false, null, null, Carrier::ALL_CARRIERS)),
-                            'id' => 'id_carrier',
-                            'name' => 'name',
-                        ],
-                        'desc' => $this->l('This field is used for "Generate shipping costs in several countries". Hold [Ctrl] key pressed to select multiple carriers.'),
-                    ],
-                    [
-                        'type' => 'select',
-                        'label' => $this->l('Images type'),
-                        'name' => 'img_type',
-                        'default_value' => $helper->tpl_vars['fields_value']['img_type'],
-                        'options' => [
-                            // 'default' => array('value' => 0, 'label' => $this->l('Choose image type')),
-                            'query' => $img_types,
-                            'id' => 'name',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'select',
-                        'label' => $this->l('Manufacturers References type (MPN)'),
-                        'name' => 'mpn_type',
-                        'default_value' => $helper->tpl_vars['fields_value']['mpn_type'],
-                        'options' => [
-                            'query' => $mpn_types,
-                            'id' => 'id_mpn',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'text',
-                        'label' => $this->l('Minimum product price'),
-                        'name' => 'export_min_price',
-                        'class' => 'fixed-width-xs',
-                        'prefix' => $this->context->currency->sign,
-                        'desc' => $this->l('Products at lower price are not exported. Enter 0.00 for no use.'),
-                        'required' => true,
-                    ],
-                    [
-                        'type' => 'select',
-                        'label' => $this->l('Products gender feature'),
-                        'name' => 'gender',
-                        'default_value' => $helper->tpl_vars['fields_value']['gender'],
-                        'options' => [
-                            'query' => $features,
-                            'id' => 'id_feature',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'select',
-                        'label' => $this->l('Products age group feature'),
-                        'name' => 'age_group',
-                        'default_value' => $helper->tpl_vars['fields_value']['age_group'],
-                        'options' => [
-                            'query' => $features,
-                            'id' => 'id_feature',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'select',
-                        'multiple' => true,
-                        'label' => $this->l('Products color feature'),
-                        'name' => 'color[]',
-                        'default_value' => $helper->tpl_vars['fields_value']['color[]'],
-                        'options' => [
-                            'query' => $features,
-                            'id' => 'id_feature',
-                            'name' => 'name',
-                        ],
-                        'desc' => $this->l('Hold [Ctrl] key pressed to select multiple color features.'),
-                    ],
-                    [
-                        'type' => 'select',
-                        'multiple' => true,
-                        'label' => $this->l('Products material feature'),
-                        'name' => 'material[]',
-                        'default_value' => $helper->tpl_vars['fields_value']['material[]'],
-                        'options' => [
-                            'query' => $features,
-                            'id' => 'id_feature',
-                            'name' => 'name',
-                        ],
-                        'desc' => $this->l('Hold [Ctrl] key pressed to select multiple material features.'),
-                    ],
-                    [
-                        'type' => 'select',
-                        'multiple' => true,
-                        'label' => $this->l('Products pattern feature'),
-                        'name' => 'pattern[]',
-                        'default_value' => $helper->tpl_vars['fields_value']['pattern[]'],
-                        'options' => [
-                            'query' => $features,
-                            'id' => 'id_feature',
-                            'name' => 'name',
-                        ],
-                        'desc' => $this->l('Hold [Ctrl] key pressed to select multiple pattern features.'),
-                    ],
-                    [
-                        'type' => 'select',
-                        'multiple' => true,
-                        'label' => $this->l('Products size feature'),
-                        'name' => 'size[]',
-                        'default_value' => $helper->tpl_vars['fields_value']['size[]'],
-                        'options' => [
-                            'query' => $features,
-                            'id' => 'id_feature',
-                            'name' => 'name',
-                        ],
-                        'desc' => $this->l('Hold [Ctrl] key pressed to select multiple size features.'),
-                    ],
-                    [
-                        'type' => 'switch',
-                        'label' => $this->l('Export attributes combinations'),
-                        'name' => 'export_attributes',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                        'desc' => $this->l('If checked, one product is exported for each attributes combination. Products should have at least one attribute filled in order to be exported as combinations.'),
-                    ],
-                    [
-                        'type' => 'switch',
-                        'label' => $this->l('Export products with no GTIN code'),
-                        'name' => 'no_gtin',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                        'desc' => $this->l('Allow export of products, that no not have a GTIN code (EAN13/UPC)'),
-                    ],
-                    [
-                        'type' => 'switch',
-                        'label' => $this->l('Export products shipping dimensions'),
-                        'name' => 'shipping_dimension',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                        'desc' => $this->l('Allow export of dimension for each products, if typed in product details'),
-                    ],
-                    [
-                        'type' => 'switch',
-                        'label' => $this->l('Export products with no brand'),
-                        'name' => 'no_brand',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                        'desc' => $this->l('Allow export of products, that no not have a brand (Manufacturer)'),
-                    ],
-                    [
-                        'type' => 'switch',
-                        'label' => $this->l('Set <identifier_exists> tag to FALSE'),
-                        'name' => 'id_exists_tag',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                        'desc' => $this->l('If your product is new (which you submit through the condition attribute) and it doesn’t have a gtin and brand or mpn and brand.') . ' <a href="https://support.google.com/merchants/answer/6324478?hl=en" target="_blank">' . $this->l('identifier_exists: Definition') . '</a>',
-                    ],
-                    [
-                        'type' => 'switch',
-                        'label' => $this->l('Export non-available products'),
-                        'name' => 'export_nap',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                    ],
-                    [
-                        'type' => 'switch',
-                        'label' => $this->l('Export product quantity'),
-                        'name' => 'quantity',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                    ],
-                    [
-                        'type' => 'switch',
-                        'label' => $this->l('Export "On Sale" indication'),
-                        'name' => 'featured_products',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                    ],
-                    [
-                        'type' => 'switch',
-                        'label' => $this->l('Generate the files to the root of the site'),
-                        'name' => 'gen_file_in_root',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                    ],
-                    [
-                        'type' => 'text',
-                        'label' => $this->l('prefix for output filename'),
-                        'name' => 'file_prefix',
-                        'class' => 'fixed-width-lg',
-                        'desc' => $this->l('Allows you to prefix feed filename. Makes it a little harder for other to guess your feed names'),
-                    ],
-                    [
-                        'type' => 'switch',
-                        'label' => $this->l('Automatic export on saves?'),
-                        'name' => 'autoexport_on_save',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                        'desc' => $this->l('When disabled, you have to "Save & Export" manually or run the CRON job, to generate new files.'),
-                    ],
-                ],
-                'description' => $form_desc,
-                'submit' => [
-                    'name' => 'submitFluxOptions',
-                    'title' => $this->l('Save & Export'),
-                ],
-            ],
-        ];
-
-        return $helper->generateForm([
-            $fields_form,
-        ]);
-    }
-
-    public function renderLocalInventoryForm()
-    {
-        $helper = new HelperForm();
-        $helper->show_toolbar = false;
-        $helper->table = $this->table;
-
-        $lang = new Language((int) Configuration::get('PS_LANG_DEFAULT'));
-        $helper->default_form_language = $lang->id;
-        $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
-        $this->fields_form = [];
-        $helper->module = $this;
-        $helper->identifier = $this->identifier;
-        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false) . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
-        $helper->token = Tools::getAdminTokenLite('AdminModules');
-        $helper->tpl_vars = [
-            'fields_value' => $this->getConfigLocalInventoryFieldsValues($this->context->shop->id),
-            'id_language' => $this->context->language->id,
-            'languages' => $this->context->controller->getLanguages(),
-        ];
-
-        $id_lang = $this->context->language->id;
-        $id_shop = $this->context->shop->id;
-
-        $fields_form = [
-            'form' => [
-                'legend' => [
-                    'title' => $this->l('Local Inventory Parameters'),
-                    'icon' => 'icon-cogs',
-                ],
-                'input' => [
-                    [
-                        'type' => 'text',
-                        'label' => $this->l('Your store code'),
-                        'name' => 'store_code',
-                        'desc' => $this->l('Your store code'),
-                    ],
-                ],
-                'submit' => [
-                    'name' => 'submitLocalInventoryFluxOptions',
-                    'title' => $this->l('Save & Export'),
-                ],
-            ],
-        ];
-
-        return $helper->generateForm([
-            $fields_form,
-        ]);
-    }
-
     public function renderReviewsForm()
     {
         $helper = new HelperForm();
@@ -1143,111 +461,6 @@ class GShoppingFlux extends Module
         return $helper->generateForm([
             $fields_form,
         ]);
-    }
-
-    public function getConfigFieldsValues($shop_id)
-    {
-        $shop_group_id = Shop::getGroupFromShop($shop_id);
-        $product_type = [];
-        $description = 'short';
-        $shipping_price_fixed = true;
-        $shipping_mode = 'fixed';
-        $shipping_price = 0;
-        $shipping_country = 'UK';
-        $shipping_countries = 'all';
-        $img_type = 'large_default';
-        $mpn_type = '';
-        $gender = '';
-        $age_group = '';
-        $export_attributes = '';
-        $color = [];
-        $material = [];
-        $pattern = [];
-        $size = [];
-        $export_min_price = 0;
-        $no_gtin = true;
-        $shipping_dimension = true;
-        $no_brand = true;
-        $id_exists_tag = true;
-        $export_nap = true;
-        $quantity = true;
-        $featured_products = true;
-        $gen_file_in_root = true;
-        $autoexport_on_save = true;
-        $file_prefix = '';
-
-        foreach (Language::getLanguages(false) as $lang) {
-            $product_type[$lang['id_lang']] = Configuration::get('GS_PRODUCT_TYPE', $lang['id_lang'], $shop_group_id, $shop_id);
-        }
-
-        $description = Configuration::get('GS_DESCRIPTION', 0, $shop_group_id, $shop_id);
-        $shipping_mode = Configuration::get('GS_SHIPPING_MODE', 0, $shop_group_id, $shop_id);
-        $shipping_price_fixed &= (bool) Configuration::get('GS_SHIPPING_PRICE_FIXED', 0, $shop_group_id, $shop_id);
-        $shipping_price = (float) Configuration::get('GS_SHIPPING_PRICE', 0, $shop_group_id, $shop_id);
-        $shipping_country = Configuration::get('GS_SHIPPING_COUNTRY', 0, $shop_group_id, $shop_id);
-        $shipping_countries = explode(';', Configuration::get('GS_SHIPPING_COUNTRIES', 0, $shop_group_id, $shop_id));
-        $carriers_excluded = explode(';', Configuration::get('GS_CARRIERS_EXCLUDED', 0, $shop_group_id, $shop_id));
-        $img_type = Configuration::get('GS_IMG_TYPE', 0, $shop_group_id, $shop_id);
-        $mpn_type = Configuration::get('GS_MPN_TYPE', 0, $shop_group_id, $shop_id);
-        $gender = Configuration::get('GS_GENDER', 0, $shop_group_id, $shop_id);
-        $age_group = Configuration::get('GS_AGE_GROUP', 0, $shop_group_id, $shop_id);
-        $export_attributes = Configuration::get('GS_ATTRIBUTES', 0, $shop_group_id, $shop_id);
-        $color = explode(';', Configuration::get('GS_COLOR', 0, $shop_group_id, $shop_id));
-        $material = explode(';', Configuration::get('GS_MATERIAL', 0, $shop_group_id, $shop_id));
-        $pattern = explode(';', Configuration::get('GS_PATTERN', 0, $shop_group_id, $shop_id));
-        $size = explode(';', Configuration::get('GS_SIZE', 0, $shop_group_id, $shop_id));
-        $export_min_price = (float) Configuration::get('GS_EXPORT_MIN_PRICE', 0, $shop_group_id, $shop_id);
-        $no_gtin &= (bool) Configuration::get('GS_NO_GTIN', 0, $shop_group_id, $shop_id);
-        $shipping_dimension &= (bool) Configuration::get('GS_SHIPPING_DIMENSION', 0, $shop_group_id, $shop_id);
-        $no_brand &= (bool) Configuration::get('GS_NO_BRAND', 0, $shop_group_id, $shop_id);
-        $id_exists_tag &= (bool) Configuration::get('GS_ID_EXISTS_TAG', 0, $shop_group_id, $shop_id);
-        $export_nap &= (bool) Configuration::get('GS_EXPORT_NAP', 0, $shop_group_id, $shop_id);
-        $quantity &= (bool) Configuration::get('GS_QUANTITY', 0, $shop_group_id, $shop_id);
-        $featured_products &= (bool) Configuration::get('GS_FEATURED_PRODUCTS', 0, $shop_group_id, $shop_id);
-        $gen_file_in_root &= (bool) Configuration::get('GS_GEN_FILE_IN_ROOT', 0, $shop_group_id, $shop_id);
-        $autoexport_on_save &= (bool) Configuration::get('GS_AUTOEXPORT_ON_SAVE', 0, $shop_group_id, $shop_id);
-        $file_prefix = Configuration::get('GS_FILE_PREFIX', 0, $shop_group_id, $shop_id);
-
-        return [
-            'product_type[]' => $product_type,
-            'description' => $description,
-            'shipping_mode' => $shipping_mode,
-            'shipping_price_fixed' => (int) $shipping_price_fixed,
-            'shipping_price' => (float) $shipping_price,
-            'shipping_country' => $shipping_country,
-            'shipping_countries[]' => $shipping_countries,
-            'carriers_excluded[]' => $carriers_excluded,
-            'img_type' => $img_type,
-            'mpn_type' => $mpn_type,
-            'gender' => $gender,
-            'age_group' => $age_group,
-            'export_attributes' => (int) $export_attributes,
-            'color[]' => $color,
-            'material[]' => $material,
-            'pattern[]' => $pattern,
-            'size[]' => $size,
-            'export_min_price' => (float) $export_min_price,
-            'no_gtin' => (int) $no_gtin,
-            'shipping_dimension' => (int) $shipping_dimension,
-            'no_brand' => (int) $no_brand,
-            'id_exists_tag' => (int) $id_exists_tag,
-            'export_nap' => (int) $export_nap,
-            'quantity' => (int) $quantity,
-            'featured_products' => (int) $featured_products,
-            'gen_file_in_root' => (int) $gen_file_in_root,
-            'file_prefix' => $file_prefix,
-            'autoexport_on_save' => (int) $autoexport_on_save,
-        ];
-    }
-
-    public function getConfigLocalInventoryFieldsValues($shop_id)
-    {
-        $shop_group_id = Shop::getGroupFromShop($shop_id);
-        $store_code = Configuration::get('GS_LOCAL_SHOP_CODE', 0, $shop_group_id, $shop_id);
-
-        return [
-            'store_code' => $store_code,
-        ];
     }
 
     public function getConfigReviewsFieldsValues($shop_id)

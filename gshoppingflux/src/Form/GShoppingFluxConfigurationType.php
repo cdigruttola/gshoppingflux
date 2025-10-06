@@ -211,7 +211,7 @@ class GShoppingFluxConfigurationType extends TranslatorAwareType
             ])
             ->add('id_exists_tag', SwitchType::class, [
                 'label' => $this->trans('Set <identifier_exists> tag to FALSE', 'Modules.Gshoppingflux.Admin'),
-                'help' => $this->trans('If your product is new (which you submit through the condition attribute) and it doesn’t have a gtin and brand or mpn and brand.', 'Modules.Gshoppingflux.Admin'),
+                'help' => $this->trans('If your product is new (which you submit through the condition attribute) and it doesn’t have a gtin and brand or mpn and brand. <a href="https://support.google.com/merchants/answer/6324478?hl=en" target="_blank">identifier_exists: Definition</a>', 'Modules.Gshoppingflux.Admin'),
                 'multistore_configuration_key' => GShoppingFluxDataConfiguration::GS_ID_EXISTS_TAG,
             ])
             ->add('export_nap', SwitchType::class, [
@@ -243,6 +243,7 @@ class GShoppingFluxConfigurationType extends TranslatorAwareType
             ])
             ->add('store_code', TextType::class, [
                 'label' => $this->trans('Your store code', 'Modules.Gshoppingflux.Admin'),
+                'help' => $this->trans('Your store code for the local inventory file', 'Modules.Gshoppingflux.Admin'),
                 'multistore_configuration_key' => GShoppingFluxDataConfiguration::GS_LOCAL_SHOP_CODE,
             ]);
     }
